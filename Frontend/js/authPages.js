@@ -38,7 +38,6 @@ function setupLogin() {
 
     const em = (email.value || "").trim();
     const pw = password.value || "";
-      const loginRole = qs("#loginRole")?.value;
 
     let ok = true;
     if (!validEmail(em)) { showErr(emailErr, "Please enter a valid email."); ok = false; }
@@ -49,10 +48,10 @@ function setupLogin() {
     btn.textContent = "Logging in...";
 
     try {
-        console.log("[authPages] submit login", { email: em, role: loginRole });
+        console.log("[authPages] submit login", { email: em });
         const data = await apiFetch("/auth/login", {
           method: "POST",
-          body: JSON.stringify({ email: em, password: pw, role: loginRole })
+          body: JSON.stringify({ email: em, password: pw })
         });
 
         console.log("[authPages] login response", data);
@@ -85,7 +84,6 @@ function setupRegister() {
   const email = qs("#email");
   const password = qs("#password");
   const confirm = qs("#confirm");
-  const roleSelect = qs("#role");
 
   const userErr = qs("#userErr");
   const emailErr = qs("#emailErr");
@@ -102,7 +100,6 @@ function setupRegister() {
     const em = (email.value || "").trim();
     const pw = password.value || "";
     const cpw = confirm.value || "";
-    const role = (roleSelect?.value) || "user";
 
     let ok = true;
     if (un.length < 2) { showErr(userErr, "Username must be at least 2 characters."); ok = false; }
@@ -117,7 +114,7 @@ function setupRegister() {
     try {
       await apiFetch("/auth/register", {
         method: "POST",
-        body: JSON.stringify({ username: un, email: em, password: pw, role })
+        body: JSON.stringify({ username: un, email: em, password: pw, role: "user" })
       });
 
       toast("Registered! Please login.", "success");
