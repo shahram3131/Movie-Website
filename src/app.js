@@ -24,6 +24,11 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/movies", movieRoutes);
+// Fallback to serve index.html for SPA routing
+app.get("*", (req, res) => {
+	res.sendFile(path.join(__dirname, "../Frontend/index.html"));
+});
+
 
 app.use(notFound);
 app.use(errorHandler);

@@ -1,2 +1,2 @@
-// Change this after deployment
-export const API_BASE = "http://localhost:5000/api";
+// Use relative API base so deployed frontend calls backend on same origin
+export const API_BASE = "/api";
