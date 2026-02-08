@@ -1,2 +1,3 @@
-// Use relative API base so deployed frontend calls backend on same origin
-export const API_BASE = "/api";
+// Use localhost for local development, otherwise use relative API base for deployment
+const isLocal = (typeof window !== 'undefined') && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+export const API_BASE = isLocal ? "http://localhost:5000/api" : "/api";
