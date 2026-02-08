@@ -50,13 +50,22 @@ export async function register(req, res, next) {
 
 export async function login(req, res, next) {
   try {
-    const { email, password } = req.body;
+    const { email, password, role } = req.body;
 
     const user = await User.findOne({ email });
     if (!user) return res.status(401).json({ message: "Invalid email or password" });
 
     const ok = await bcrypt.compare(password, user.password);
     if (!ok) return res.status(401).json({ message: "Invalid email or password" });
+
+    // Validate role matches
+    const requestedRole = role || "user";
+    if (requestedRole === "admin" && user.role !== "admin") {
+      return res.status(403).json({ message: "This account is not an admin account" });
+    }
+    if (requestedRole === "user" && user.role === "admin") {
+      return res.status(403).json({ message: "Admin accounts must login as admin" });
+    }
 
     const token = signToken({ sub: user._id.toString(), role: user.role }, "7d");
 

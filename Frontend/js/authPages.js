@@ -38,6 +38,7 @@ function setupLogin() {
 
     const em = (email.value || "").trim();
     const pw = password.value || "";
+    const loginRole = qs("#loginRole")?.value || "user";
 
     let ok = true;
     if (!validEmail(em)) { showErr(emailErr, "Please enter a valid email."); ok = false; }
@@ -48,10 +49,10 @@ function setupLogin() {
     btn.textContent = "Logging in...";
 
     try {
-        console.log("[authPages] submit login", { email: em });
+        console.log("[authPages] submit login", { email: em, role: loginRole });
         const data = await apiFetch("/auth/login", {
           method: "POST",
-          body: JSON.stringify({ email: em, password: pw })
+          body: JSON.stringify({ email: em, password: pw, role: loginRole })
         });
 
         console.log("[authPages] login response", data);
